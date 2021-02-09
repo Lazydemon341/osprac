@@ -1,8 +1,9 @@
+
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdio.h>
 
-int main()
+int main(int argc, char *argv[], char *envp[])
 {
   pid_t pid, ppid;
   int a = 0;
@@ -28,6 +29,6 @@ int main()
 
 
   printf("My pid = %d, my ppid = %d, result = %d\n", (int)pid, (int)ppid, a);
-
+  execl("/bin/cat", "/bin/cat", "task3.c", (char*)NULL);
   return 0;
 }
