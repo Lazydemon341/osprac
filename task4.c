@@ -15,6 +15,7 @@ int main(int argc, char *argv[], char *envp[])
     /* ошибка */
 } else if (pid == 0) {
     a = a+2;
+    execl("/bin/cat", "/bin/cat", "task3.c", (char*)NULL);
     /* ребенок */
 } else {
     a = a+3;
@@ -29,6 +30,5 @@ int main(int argc, char *argv[], char *envp[])
 
 
   printf("My pid = %d, my ppid = %d, result = %d\n", (int)pid, (int)ppid, a);
-  execl("/bin/cat", "/bin/cat", "task3.c", (char*)NULL);
   return 0;
 }
