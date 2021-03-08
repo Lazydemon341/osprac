@@ -27,5 +27,6 @@ int main()
   if (close(fd) < 0) {
     exit(-1);
   }
+  close(fd[1]);
   return 0;
 }

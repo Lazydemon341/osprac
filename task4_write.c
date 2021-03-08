@@ -25,5 +25,6 @@ int main()
   if (size != 14) {
     exit(-1);
   }
+  close(fd[1]);
   return 0;
 }

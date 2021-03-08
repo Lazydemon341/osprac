@@ -23,6 +23,7 @@ int main() {
         result++;
     }
     printf("Size of pipe: %d bytes\n", result);
+    free(resstring);
     return 0;
 }
 
