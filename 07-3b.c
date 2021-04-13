@@ -13,6 +13,10 @@ int main()
   char    pathname[] = "07-3a.c";
   key_t   key;
   long    i;
+  
+  int    semid;
+  key_t  key2;        
+  struct sembuf mybuf; // Structure for specifying operations on a semaphore.
 
   if ((key = ftok(pathname,0)) < 0) {
     printf("Can\'t generate key\n");
@@ -36,6 +40,40 @@ int main()
     printf("Can't attach shared memory\n");
     exit(-1);
   }
+  
+  if ((key2 = ftok(pathname,0)) < 0) {
+    printf("Can\'t generate semaphores key\n");
+    exit(-1);
+  }
+  //
+  // Try to access by key the array of semaphores, if it exists,
+  // or create it from a single semaphore if it does not exist yet,
+  // with read & write access for all users.
+  //
+  if ((semid = semget(key2, 1, 0666 | IPC_CREAT)) < 0) {
+    printf("Can\'t create semaphore set\n");
+    exit(-1);
+  }
+  
+  mybuf.sem_num = 0;
+  mybuf.sem_op  = 1;
+  mybuf.sem_flg = 0;
+  
+  if (semop(semid, &mybuf, 1) < 0) {
+    printf("Can\'t initialize semaphore\n");
+    exit(-1);
+  }
+  
+  mybuf.sem_num = 0;
+  mybuf.sem_op  = -1;
+  mybuf.sem_flg = 0;
+  
+  if (semop(semid, &mybuf, 1) < 0) {
+    printf("Can\'t wait for condition\n");
+    exit(-1);
+  }
+  
+  printf("The condition is present\n");
 
   if (new) {
     array[0] =  0;
@@ -45,6 +83,26 @@ int main()
     array[1] += 1;
     for(i=0; i<2000000000L; i++);
     array[2] += 1;
+  }
+  
+  mybuf.sem_num = 0;
+  mybuf.sem_op  = 1;
+  mybuf.sem_flg = 0;
+  
+  if (semop(semid, &mybuf, 1) < 0) {
+    printf("Can\'t wait for condition\n");
+    exit(-1);
+  }
+  
+  printf("The condition is present\n");
+  
+  mybuf.sem_num = 0;
+  mybuf.sem_op  = 1;
+  mybuf.sem_flg = 0;
+
+  if (semop(semid, &mybuf, 1) < 0) {
+    printf("Can\'t add 1 to semaphore\n");
+    exit(-1);
   }
 
   printf
