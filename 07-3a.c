@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <system/sem.h>
 
 int main()
 {
@@ -85,6 +86,10 @@ int main()
     array[2] += 1;
   }
   
+  printf
+    ("Program 1 was spawn %d times, program 2 - %d times, total - %d times\n",
+    array[0], array[1], array[2]);
+  
   mybuf.sem_num = 0;
   mybuf.sem_op  = 1;
   mybuf.sem_flg = 0;
@@ -104,10 +109,6 @@ int main()
     printf("Can\'t add 1 to semaphore\n");
     exit(-1);
   }
-
-  printf
-    ("Program 1 was spawn %d times, program 2 - %d times, total - %d times\n",
-    array[0], array[1], array[2]);
 
   if (shmdt(array) < 0) {
     printf("Can't detach shared memory\n");
