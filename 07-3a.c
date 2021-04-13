@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <system/sem.h>
+#include <sys/sem.h>
 
 int main()
 {
@@ -74,7 +74,7 @@ int main()
     exit(-1);
   }
   
-  printf("The condition is present\n");
+  printf("Enter critical section\n");
 
   if (new) {
     array[0] =  1;
@@ -93,22 +93,13 @@ int main()
   mybuf.sem_num = 0;
   mybuf.sem_op  = 1;
   mybuf.sem_flg = 0;
-  
-  if (semop(semid, &mybuf, 1) < 0) {
-    printf("Can\'t wait for condition\n");
-    exit(-1);
-  }
-  
-  printf("The condition is present\n");
-  
-  mybuf.sem_num = 0;
-  mybuf.sem_op  = 1;
-  mybuf.sem_flg = 0;
 
   if (semop(semid, &mybuf, 1) < 0) {
     printf("Can\'t add 1 to semaphore\n");
     exit(-1);
   }
+
+    printf("Exit critical section\n");
 
   if (shmdt(array) < 0) {
     printf("Can't detach shared memory\n");
