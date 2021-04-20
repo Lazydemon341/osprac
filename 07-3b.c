@@ -5,6 +5,8 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <sys/sem.h>
+#include <errno.h>
+
 
 int main()
 {
@@ -53,9 +55,16 @@ int main()
   //
   if ((semid = semget(key2, 1, 0666 | IPC_CREAT | IPC_EXCL )) < 0) {
 	if (errno != EEXIST){
+		
       printf("Can\'t create semaphore set\n");
       exit(-1);
+	  
 	} else{
+	  
+	  semid = semget(key, 1, 0666);
+	}
+  } else {
+	  
 	  mybuf.sem_num = 0;
 	  mybuf.sem_op  = 1;
 	  mybuf.sem_flg = 0;
@@ -64,8 +73,7 @@ int main()
         printf("Can\'t initialize semaphore\n");
         exit(-1);
       }
-
-	}
+	  
   }
   
   mybuf.sem_num = 0;
