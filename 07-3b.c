@@ -51,18 +51,21 @@ int main()
   // or create it from a single semaphore if it does not exist yet,
   // with read & write access for all users.
   //
-  if ((semid = semget(key2, 1, 0666 | IPC_CREAT)) < 0) {
-    printf("Can\'t create semaphore set\n");
-    exit(-1);
-  }
-  
-  mybuf.sem_num = 0;
-  mybuf.sem_op  = 1;
-  mybuf.sem_flg = 0;
-  
-  if (semop(semid, &mybuf, 1) < 0) {
-    printf("Can\'t initialize semaphore\n");
-    exit(-1);
+  if ((semid = semget(key2, 1, 0666 | IPC_CREAT | IPC_EXCL )) < 0) {
+	if (errno != EEXIST){
+      printf("Can\'t create semaphore set\n");
+      exit(-1);
+	} else{
+	  mybuf.sem_num = 0;
+	  mybuf.sem_op  = 1;
+	  mybuf.sem_flg = 0;
+	  
+	  if (semop(semid, &mybuf, 1) < 0) {
+        printf("Can\'t initialize semaphore\n");
+        exit(-1);
+      }
+
+	}
   }
   
   mybuf.sem_num = 0;
