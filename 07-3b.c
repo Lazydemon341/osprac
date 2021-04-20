@@ -61,7 +61,7 @@ int main()
 	  
 	} else{
 	  
-	  semid = semget(key, 1, 0666);
+	  semid = semget(key2, 1, 0666);
 	}
   } else {
 	  
