@@ -16,14 +16,13 @@
 			D(S, 1)
 			D(S, 1)
 			read
-			A(S, 1)
 			
 	child:
 		while (n > 0):
 			Z(S)
 			read
 			write
-			A(S, 1)
+			A(S, 2)
 
 */
 
@@ -129,15 +128,6 @@ int main()
 			N = N - 1;
 			
 			printf("\nParent read from child: %s\nParent is done working!\n", resstring);
-			
-			// A(S, 1)
-			mybuf.sem_num = 0;
-			mybuf.sem_op  = -1;
-			mybuf.sem_flg = 0;
-			if (semop(semid, &mybuf, 1) < 0) {
-				printf("Can\'t substract 1 from semaphore\n");
-				exit(-1);
-			}
 		}
     } else {
 		
@@ -179,9 +169,9 @@ int main()
 			
 			printf("Child is done working!");
 			
-			// A(S, 1)
+			// A(S, 2)
 			mybuf.sem_num = 0;
-			mybuf.sem_op  = 1;
+			mybuf.sem_op  = 2;
 			mybuf.sem_flg = 0;
 			if (semop(semid, &mybuf, 1) < 0) {
 				printf("Can\'t wait for 0 on semaphore\n");
