@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <unistd.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/sem.h>
@@ -58,7 +59,10 @@ int main()
 	  }
 	} else {
 		// A(S, 1)
-		if(semop(semid, &bufA, 1) < 0){
+		mybuf.sem_num = 0;
+		mybuf.sem_op = 1;
+		mybuf.sem_flg = 0;
+		if(semop(semid, &mybuf, 1) < 0){
 			printf("Cannot init semaphore\n");
 			exit(-1);
 		}
@@ -86,8 +90,6 @@ int main()
 				printf("Can\'t write all string to pipe\n");
 				exit(-1);
 			}
-			//закрываем запись родителя
-			close(parent[1]);
 			
 			// D(S, 1)
 			mybuf.sem_num = 0;
