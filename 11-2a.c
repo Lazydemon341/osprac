@@ -57,6 +57,18 @@ int main(void)
       exit(-1);
     }
   }
+  
+  for (i = 1; i <= 5; i++) {
+	 if (( len = msgrcv(msqid, (struct msgbuf *) &mybuf, sizeof(mybuf.mmsg), 2, 0)) < 0) {
+      printf("Can\'t receive message from queue\n");
+      exit(-1);
+    }
+	
+
+    printf("message type = %ld, text = %s, id = %s\n", mybuf.mtype, mybuf.mmsg.mtext, mybuf.mmsg.msg_id);
+  }
+  
+  msgctl(msqid, IPC_RMID, (struct msqid_ds *) NULL);
 
   return 0;
 }

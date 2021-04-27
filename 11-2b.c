@@ -5,17 +5,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define LAST_MESSAGE 255 // Message type for termination of program 11-1b.c
+#define LAST_MESSAGE 255
 
 int main(void)
 {
-  int msqid;      // IPC descriptor for the message queue
-  char pathname[]="11-1a.c"; // The file name used to generate the key.
-                             // A file with this name must exist in the current directory.
-  key_t  key;     // IPC key
-  int i;      // Cycle counter and the length of the informative part of the message
+  int msqid;
+  char pathname[]="11-1a.c";
+  key_t  key;
+  int len, maxlen;
 
-  struct mymsgbuf // Custom structure for the message
+  struct mymsgbuf
   {
     long mtype;
     struct {
@@ -28,23 +27,28 @@ int main(void)
     printf("Can\'t generate key\n");
     exit(-1);
   }
-  //
-  // Trying to get access by key to the message queue, if it exists,
-  // or create it, with read & write access for all users.
-  //
+
   if ((msqid = msgget(key, 0666 | IPC_CREAT)) < 0) {
     printf("Can\'t get msqid\n");
     exit(-1);
   }
 
-  /* Send information */
+  for (i = 1; i <= 5; i++) {
+	 if (( len = msgrcv(msqid, (struct msgbuf *) &mybuf, sizeof(mybuf.mmsg), 1, 0)) < 0) {
+      printf("Can\'t receive message from queue\n");
+      exit(-1);
+    }
+	
 
+    printf("message type = %ld, text = %s, id = %s\n", mybuf.mtype, mybuf.mmsg.mtext, mybuf.mmsg.msg_id);
+  }
+  
   for (i = 1; i <= 5; i++) {
     //
     // Fill in the structure for the message and
     // determine the length of the informative part.
     //
-    mybuf.mtype = 1;
+    mybuf.mtype = 2;
     strcpy(mybuf.mmsg.mtext, "This is text message");
 	mybuf.mmsg.msg_id = i;
     //
@@ -57,6 +61,7 @@ int main(void)
       exit(-1);
     }
   }
+  
 
   return 0;
 }
