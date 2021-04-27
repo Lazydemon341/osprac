@@ -54,7 +54,7 @@ int main(void)
       exit(0);
     }
 
-    printf("message type = %ld, text = %s, id = %s\n", mybuf.mtype, mybuf.mmsg.mtext, mybuf.mmsg.msg_id);
+    printf("message type = %ld, text = %s, id = %d\n", mybuf.mtype, mybuf.mmsg.mtext, mybuf.mmsg.msg_id);
   }
 
   return 0;
