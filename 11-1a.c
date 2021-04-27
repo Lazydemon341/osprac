@@ -46,6 +46,7 @@ int main(void)
     //
     mybuf.mtype = 1;
     strcpy(mybuf.mmsg.mtext, "This is text message");
+	mybuf.mmsg.msg_id = i;
     //
     // Send the message. If there is an error,
     // report it and delete the message queue from the system.
