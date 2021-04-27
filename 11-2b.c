@@ -12,7 +12,7 @@ int main(void)
   int msqid;
   char pathname[]="11-1a.c";
   key_t  key;
-  int len, maxlen;
+  int i, len, maxlen;
 
   struct mymsgbuf
   {
@@ -40,7 +40,7 @@ int main(void)
     }
 	
 
-    printf("message type = %ld, text = %s, id = %s\n", mybuf.mtype, mybuf.mmsg.mtext, mybuf.mmsg.msg_id);
+    printf("message type = %ld, text = %s, id = %d\n", mybuf.mtype, mybuf.mmsg.mtext, mybuf.mmsg.msg_id);
   }
   
   for (i = 1; i <= 5; i++) {

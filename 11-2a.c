@@ -13,7 +13,7 @@ int main(void)
   char pathname[]="11-1a.c"; // The file name used to generate the key.
                              // A file with this name must exist in the current directory.
   key_t  key;     // IPC key
-  int i;      // Cycle counter and the length of the informative part of the message
+  int i, len;      // Cycle counter and the length of the informative part of the message
 
   struct mymsgbuf // Custom structure for the message
   {
@@ -59,13 +59,13 @@ int main(void)
   }
   
   for (i = 1; i <= 5; i++) {
-	 if (( len = msgrcv(msqid, (struct msgbuf *) &mybuf, sizeof(mybuf.mmsg), 2, 0)) < 0) {
-      printf("Can\'t receive message from queue\n");
-      exit(-1);
-    }
+	if (( len = msgrcv(msqid, (struct msgbuf *) &mybuf, sizeof(mybuf.mmsg), 2, 0)) < 0) {
+      		printf("Can\'t receive message from queue\n");
+     		 exit(-1);
+    	}
 	
 
-    printf("message type = %ld, text = %s, id = %s\n", mybuf.mtype, mybuf.mmsg.mtext, mybuf.mmsg.msg_id);
+    printf("message type = %ld, text = %s, id = %d\n", mybuf.mtype, mybuf.mmsg.mtext, mybuf.mmsg.msg_id);
   }
   
   msgctl(msqid, IPC_RMID, (struct msqid_ds *) NULL);
