@@ -24,14 +24,14 @@ int main() {
         long mtype;
         struct {
             pid_t pid;
-            char msg[666];
+            float msg;
         } info;
     } clientbuf;
 
     struct servermsgbuf {
         long mtype;
         struct {
-            char msg[666];
+            float msg;
         } info;
     } serverbuf;
 
@@ -48,12 +48,14 @@ int main() {
     clientbuf.mtype = 1;
     clientbuf.info.pid = getpid();
 
+    printf("Enter number:\n");
+    scanf("%f", &clientbuf.info.msg);
+    printf("%.3f\n", clientbuf.info.msg);
     len = sizeof(clientbuf.info);
-    sprintf(clientbuf.info.msg, "%d", rand());
 
-    printf("Client #%d sends message: %s\n", clientbuf.info.pid, clientbuf.info.msg);
+    printf("Client #%d sends message: %.3f\n", clientbuf.info.pid, clientbuf.info.msg);
     if (msgsnd(msqid, (struct clientmsgbuf *) &clientbuf, len, 0) < 0) {
-        printf("Can't send message to queue\n");
+        printf("Can\'t send message to queue\n");
         msgctl(msqid, IPC_RMID, (struct msqid_ds *) NULL);
         exit(-1);
     }
@@ -62,10 +64,10 @@ int main() {
 
     maxlen = sizeof(serverbuf.info);
     if (len = msgrcv(msqid, &serverbuf, maxlen, getpid(), 0) < 0) {
-        printf("Can't receive message from queue\n");
+        printf("Can\'t receive message from queue\n");
         exit(-1);
     }
-    printf("Server: %s\n", serverbuf.info.msg);
+    printf("Server: %.3f\n", serverbuf.info.msg);
 
     return 0;
 

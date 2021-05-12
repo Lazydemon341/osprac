@@ -20,43 +20,43 @@ int main() {
         long mtype;
         struct {
             pid_t pid;
-            char msg[666];
+            float msg;
         } info;
     } clientbuf;
 
     struct sermsgbuf {
         long mtype;
         struct {
-            char msg[666];
+            float msg;
         } info;
     } serverbuf;
 
     if ((key = ftok(pathname, 0)) < 0) {
-        printf("Can't generate key\n");
+        printf("Can\'t generate key\n");
         exit(-1);
     }
 
     if ((msqid = msgget(key, 0666 | IPC_CREAT)) < 0) {
-        printf("Can't get msqid\n");
+        printf("Can\'t get msqid\n");
         exit(-1);
     }
 
     while (1) {
         maxlen = sizeof(clientbuf.info);
         if (len = msgrcv(msqid, (struct clientmsgbuf *) &clientbuf, maxlen, 1, 0) < 0) {
-            printf("Can't receive message from queue\n");
+            printf("Can\'t receive message from queue\n");
             exit(-1);
         }
 
-        printf("Client %d, message: %s\n", clientbuf.info.pid, clientbuf.info.msg);
+        printf("Client %d, message: %.3f\n", clientbuf.info.pid, clientbuf.info.msg);
 
         serverbuf.mtype = clientbuf.info.pid;
 
-        strcpy(serverbuf.info.msg, clientbuf.info.msg);
+        serverbuf.info.message = clientbuf.info.message * clientbuf.info.message;
         len = sizeof(serverbuf.info);
 
         if (msgsnd(msqid, (struct sermsgbuf *) &serverbuf, len, 0) < 0) {
-            printf("Can't send message to queue\n");
+            printf("Can\'t send message to queue\n");
             msgctl(msqid, IPC_RMID, (struct msqid_ds *) NULL);
             exit(-1);
         }
