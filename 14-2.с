@@ -3,10 +3,10 @@
 
 void my_handler(int nsig) {
   if(nsig == SIGQUIT){
-    printf("CTRL-4 pressed");
+    printf("CTRL-4");
   }
   else if(nsig == SIGINT){
-    printf("CTRL-C pressed");
+    printf("CTRL-C");
   }
 }
 
