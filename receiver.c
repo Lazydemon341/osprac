@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 pid_t spid = -1; // sender pid
-int numberber = 0;
+int number = 0;
 int i = 0;
 
 void check(){
